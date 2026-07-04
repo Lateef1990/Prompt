@@ -1,0 +1,316 @@
+# Novelty Polytechnic Landing Page — Build Prompt
+
+## Overview
+Build a modern, responsive, SEO-optimized single-page landing page for **Novelty Polytechnic, Kishi** using **Next.js 16 (App Router)**, **Tailwind CSS v4**, **TypeScript**, and **lucide-react** icons. The page must feel like a professionally designed tertiary institution website — clean, authoritative, and welcoming.
+
+---
+
+## Tech Stack
+
+| Layer | Choice |
+|-------|--------|
+| Framework | Next.js 16 (App Router) |
+| Language | TypeScript (strict mode) |
+| Styling | Tailwind CSS v4 (`@tailwindcss/postcss`) |
+| Icons | lucide-react ^1.23 |
+| Fonts | Inter (body), Playfair Display (headings) via `next/font` |
+| Linting | ESLint with `eslint-config-next` |
+| Package Manager | npm |
+
+---
+
+## Brand & Identity
+
+| Attribute | Value |
+|-----------|-------|
+| School Name | Novelty Polytechnic, Kishi |
+| Motto | Expanding Possibilities Through Technologies |
+| Address | KM 3, Ilorin-Kaima Road, Kishi, Oyo State, Nigeria |
+| Email | registrarnoveltypoly@gmail.com |
+| Phone | +2348081143395 |
+| Vision | To provide excellent technical and technological education and be one of Nigeria's best Polytechnics of international repute within the first ten years of establishment |
+| Mission | To train and certificate competent professionals with technical, vocational and entrepreneurial skills |
+| Departments | Accountancy, Computer Science, Computer Engineering, Electrical Engineering, Mass Communication, Graphics & Design |
+
+---
+
+## Color Palette
+
+- **Primary:** `#166534` (deep forest green)
+- **Primary Light:** `#22c55e` (vibrant green — CTAs, highlights)
+- **Primary Dark:** `#14532d` (dark green — footer, nav backgrounds)
+- **Accent:** `#f59e0b` (warm amber/gold — badges, icons, emphasis)
+- **Neutral Dark:** `#1e293b` (slate-800 — body text)
+- **Neutral Light:** `#f8fafc` (slate-50 — page backgrounds)
+- **White:** `#ffffff` (cards, overlays)
+- **Gradient (Hero & WhyChooseUs):** `linear-gradient(135deg, #166534 0%, #14532d 50%, #0f172a 100%)`
+
+Define theme tokens via Tailwind's `@theme inline` directive in `globals.css`:
+```css
+@theme inline {
+  --color-primary: #166534;
+  --color-primary-light: #22c55e;
+  --color-primary-dark: #14532d;
+  --color-accent: #f59e0b;
+  --color-neutral-dark: #1e293b;
+  --color-neutral-light: #f8fafc;
+  --font-heading: "Playfair Display", ui-serif, Georgia, serif;
+}
+```
+
+---
+
+## Sections (bottom-to-top order in `page.tsx`)
+
+### 1. TopBar (`TopBar.tsx`)
+- Hidden on mobile, visible `md:` and up.
+- Background `#14532d`, text white, padding `py-1.5`.
+- Left: `Mail` icon + email link `registrarnoveltypoly@gmail.com`
+- Right: `Phone` icon + phone link `+2348081143395`
+- Hover link color transitions to `#22c55e`
+
+### 2. Navbar (`Navbar.tsx`)
+- `"use client"` — requires interactivity (scroll effect + mobile menu toggle).
+- Sticky at top, z-50.
+- **When scrolled:** `bg-white/95 backdrop-blur-md shadow-lg`
+- **When at top:** `bg-white/80 backdrop-blur-sm`
+- **Left:** LogoMark (circular logo image) + vertically stacked "Novelty / Polytechnic, Kishi" text, wrapped in an anchor `#home`.
+- **Desktop nav (hidden md+):** Horizontal links: Home, About Us, Departments, Admission, Contact — each with a green underline hover effect (`after:absolute after:h-0.5 after:w-0 after:bg-[#22c55e] after:transition-all hover:after:w-full`). Plus "Apply Now" pill button (`rounded-full bg-[#22c55e]`).
+- **Mobile menu:** Hamburger icon (`Menu`) opens a fixed full-screen overlay (`bg-[#14532d] z-[60]`) that slides in from the right (`translate-x-full` to `translate-x-0`). Has a close `X` button, stacked nav links with `py-4 border-b border-white/10`, and a full-width "Apply Now" button. Body scroll locked when open. Closes on link click.
+- All touch targets minimum `min-h-[44px]`.
+
+### 3. Hero (`Hero.tsx`)
+- **Server component** (no `"use client"`).
+- Full viewport height (`min-h-screen`), `flex items-center`, overflow-hidden.
+- Gradient background with 3 decorative blurred circles (one `#22c55e`, one `#f59e0b`, one white/10) for depth.
+- **Left content (2-column grid):**
+  - LogoMark + "Novelty Polytechnic, Kishi" label in amber.
+  - H1: "Expanding Possibilities" (white) / "Through Technologies" (`#22c55e` block) — font Playfair Display, `text-4xl sm:text-5xl md:text-6xl lg:text-7xl`.
+  - Subtitle: "KM 3, Ilorin-Kaima Road, Kishi — Where Innovation Meets Excellence" — white/80.
+  - Two CTAs: "Apply for Admission" (green filled, `ArrowRight` icon) and "Explore Programs" (ghost with white border, links to `#departments`).
+- **Right aside card:** Glassmorphism card (`bg-white/10 backdrop-blur-md border border-white/20`) showing JAMB score minimum "100" in large bold numbers, plus description text.
+- **Bounce arrow** at bottom center (hidden on mobile).
+
+### 4. AboutSection (`AboutSection.tsx`)
+- **Server component**.
+- `py-20 px-4 bg-white`.
+- 2-column grid (`md:grid-cols-2`).
+- **Left:** H2 "Welcome to Novelty Polytechnic" (Playfair Display, `#166534`) + descriptive paragraph + stats row with 3 items:
+  1. `BookOpen` icon — "5" — "Departments"
+  2. `Users` icon — "40+" — "Expert Lecturers"
+  3. `Building` icon — "Modern" — "Facilities"
+- **Right:** Aspect-video placeholder with gradient background, centered `Play` icon button with hover scale effect, and "Campus Tour Video" label.
+
+### 5. CoreIdentity (`CoreIdentity.tsx`)
+- **Server component**.
+- `py-20 px-4 bg-[#f8fafc]`.
+- H2 "Our Core Identity" + subtitle.
+- 3 cards in `lg:grid-cols-3`:
+  1. **Our Motto** — `Lightbulb` icon amber — "Expanding Possibilities Through Technologies"
+  2. **Our Vision** — `Eye` icon green — full vision text
+  3. **Our Mission** — `Briefcase` icon amber — full mission text
+- Cards: white, `rounded-2xl shadow-lg`, border-top `#22c55e` 4px, `p-8 text-center`, hover lift effect.
+
+### 6. Departments (`Departments.tsx`)
+- **Server component**.
+- `py-20 px-4 bg-white`.
+- H2 "Our Departments" + subtitle "Six specialized departments...".
+- **6 department cards** in a responsive grid: `md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5` (wraps to 2nd row at XL).
+- Each card:
+  - Unique lucide icon in a colored rounded square (`w-12 h-12 rounded-xl`).
+  - Department name as H3 (bold, `#1e293b`).
+  - Description in `text-sm text-[#1e293b]/60`.
+  - "Learn More →" link in `#22c55e` with hover gap animation.
+  - Card hover: `hover:-translate-y-1 hover:shadow-xl hover:border-[#22c55e]/20`.
+- Departments data array:
+
+  | # | Icon | Name | Color |
+  |---|------|------|-------|
+  | 1 | `BookOpen` | Accountancy | `bg-blue-50 text-blue-600` |
+  | 2 | `Monitor` | Computer Science | `bg-purple-50 text-purple-600` |
+  | 3 | `Cpu` | Computer Engineering | `bg-cyan-50 text-cyan-600` |
+  | 4 | `Zap` | Electrical Engineering | `bg-orange-50 text-orange-600` |
+  | 5 | `Mic` | Mass Communication | `bg-rose-50 text-rose-600` |
+  | 6 | `Palette` | Graphics & Design | `bg-amber-50 text-amber-600` |
+
+### 7. WhyChooseUs (`WhyChooseUs.tsx`)
+- **Server component**.
+- Same gradient background as Hero.
+- H2 "Why Choose Novelty Polytechnic?" + subtitle in white.
+- 4 benefit cards in `sm:grid-cols-2 lg:grid-cols-4`:
+  1. `Award` — "Accredited Programs" — NBTE accreditation mention
+  2. `Users` — "Expert Lecturers" — qualified faculty
+  3. `FlaskConical` — "Modern Facilities" — labs, libraries
+  4. `Lightbulb` — "Entrepreneurial Focus" — self-reliance skills
+- Cards: `bg-white/10 backdrop-blur-sm rounded-2xl`, icons in `bg-white/20` circle with amber icon color. Hover lift effect.
+
+### 8. AdmissionCta (`AdmissionCta.tsx`)
+- **Server component**.
+- `bg-[#166534]` with a dot-pattern overlay (radial-gradient).
+- Centered content:
+  - H2 "Ready to Shape Your Future?" (white, Playfair Display).
+  - Paragraph in white/80.
+  - Two CTAs: "Apply Now" (`bg-[#f59e0b]` amber button, links to `tel:`) and phone button (`+2348081143395` ghost style).
+  - Footnote "Call or WhatsApp for admission enquiries" in white/60.
+
+### 9. Footer (`Footer.tsx`)
+- `"use client"` (only because of `new Date().getFullYear()` for copyright).
+- `bg-[#14532d] text-white`.
+- 4-column grid (`sm:grid-cols-2 lg:grid-cols-4`):
+  1. **Brand column** — LogoMark + school name, short description, 4 social icon placeholders (just first letter in circle).
+  2. **Quick Links** — Home, About Us, Departments, Admission, Contact with `ArrowUpRight` icon.
+  3. **Contact Info** — `MapPin` icon + address, `Mail` icon + email, `Phone` icon + phone. Icons in `#22c55e`.
+  4. **Newsletter** — short text + email input + Subscribe button.
+- Bottom bar: "© 2026 Novelty Polytechnic, Kishi. All rights reserved." + "Powered by Next.js"
+
+---
+
+## File Structure
+
+```
+src/
+  app/
+    layout.tsx        — Root layout, fonts (Inter + Playfair), metadata, JSON-LD
+    page.tsx          — Composes all sections in order
+    globals.css       — Tailwind imports + theme tokens
+    sitemap.ts        — Dynamic XML sitemap
+    robots.ts         — robots.txt generation
+  components/
+    TopBar.tsx
+    Navbar.tsx        — "use client" (scroll state + mobile menu)
+    Hero.tsx
+    AboutSection.tsx
+    CoreIdentity.tsx
+    Departments.tsx
+    WhyChooseUs.tsx
+    AdmissionCta.tsx
+    Footer.tsx        — "use client" (copyright year)
+    LogoMark.tsx      — Reusable circular logo image component
+public/
+  Images/logo.ico     — Favicon / logo
+  og-image.jpg        — 1200×630 Open Graph image
+```
+
+---
+
+## Design & UX Principles
+
+1. **Visual Hierarchy** — CTAs and headings stand out via size, color, spacing.
+2. **Consistent Spacing** — All sections: `py-20 px-4 sm:px-6 lg:px-8`. Inner containers: `max-w-7xl mx-auto`.
+3. **Mobile-First** — Design for mobile, enhance up via `sm:`, `md:`, `lg:`, `xl:`.
+4. **60-30-10 Rule** — 60% neutral/white, 30% green, 10% amber accent.
+5. **Touch Targets** — All interactive elements `min-h-[44px]` minimum.
+6. **Accessibility** — Sufficient contrast ratios, `aria-label` on icon-only buttons.
+7. **Animations** — Pure CSS transitions (no framer-motion). Hover lifts, shadow changes, underline effects.
+8. **Border Radius** — `rounded-xl` for small cards, `rounded-2xl` for feature cards, `rounded-full` for buttons.
+
+---
+
+## Responsive Breakpoints
+
+| Breakpoint | Layout Behavior |
+|------------|----------------|
+| Default (mobile) | Single column, stacked sections |
+| `sm:` (640px) | 2-column grids start |
+| `md:` (768px) | Desktop nav appears, TopBar shows, 2-column layouts |
+| `lg:` (1024px) | 3-column grids |
+| `xl:` (1280px) | 4-5 column grids |
+
+---
+
+## SEO Requirements
+
+### Metadata (in `layout.tsx`)
+Export a `metadata` object with:
+- `title` (with template `"%s | Novelty Polytechnic, Kishi"`)
+- `description` — 155-160 chars including institution name, location, departments, phone
+- `keywords` array — 10-12 terms including "Novelty Polytechnic", "polytechnic in Oyo State", department names, "admission into polytechnic 2026"
+- `openGraph` — type: website, locale: en_NG, 1200x630 image
+- `twitter` — summary_large_image card
+- `robots` — index, follow with googleBot settings
+- `icons` — favicon/logo.ico
+
+### JSON-LD Structured Data
+Inject `application/ld+json` in the `<head>` with:
+- `EducationalOrganization` schema including `@id`, name, alternateName, description, url, logo, address (PostalAddress), email, telephone, slogan, and `department` array (one `Department` entry per department).
+
+### Sitemap (`sitemap.ts`)
+Dynamic entries for: `/`, `/#about`, `/#departments`, `/#admission`, `/#contact`. Each with `lastModified`, `changeFrequency`, `priority`.
+
+### Robots (`robots.ts`)
+Allow `/`, disallow `/api/` and `/_next/`. Point sitemap to `https://noveltypolytechnic.edu.ng/sitemap.xml`.
+
+### Heading Hierarchy
+- **One H1:** Hero heading "Novelty Polytechnic, Kishi"
+- **H2:** Each section title
+- **H3:** Department names in cards
+- CTAs are `<a>` tags with descriptive text (no heading tags)
+
+### NAP Consistency
+Name, Address, Phone identical across:
+- JSON-LD structured data
+- TopBar (visible)
+- Footer (visible)
+- Hero aside card
+
+---
+
+## Performance Requirements
+
+1. **LCP < 2.5s:** Hero uses CSS gradient (no images). Fonts loaded via `next/font` with `display: "swap"`. No large hero images.
+2. **INP < 200ms:** Lightweight click handlers. Mobile menu uses CSS transforms, not JS animations.
+3. **CLS < 0.1:** Explicit `width`/`height` on images. `aspect-video` on video placeholder. Font swap controlled by `next/font`.
+4. **Images:** Use `next/image` with `unoptimized` for the .ico logo. Placeholder visuals are Tailwind-styled divs or gradients (zero network cost).
+5. **CSS:** Tailwind generates only used styles (JIT). No CSS modules or styled-components.
+6. **No client-side JS where possible** — Only Navbar and Footer need `"use client"`.
+
+---
+
+## Configuration Files
+
+### `next.config.ts`
+```ts
+import type { NextConfig } from "next";
+const nextConfig: NextConfig = {
+  images: { formats: ["image/avif", "image/webp"] },
+  async headers() {
+    return [{
+      source: "/(.*)",
+      headers: [
+        { key: "X-Content-Type-Options", value: "nosniff" },
+        { key: "X-Frame-Options", value: "DENY" },
+        { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+      ],
+    }];
+  },
+};
+export default nextConfig;
+```
+
+### `tsconfig.json`
+target ES2017, strict mode, moduleResolution bundler, `@/*` path alias mapping to `./src/*`, jsx react-jsx.
+
+### `postcss.config.mjs`
+```js
+const config = { plugins: { "@tailwindcss/postcss": {} } };
+export default config;
+```
+
+### `package.json` scripts
+```json
+{
+  "dev": "next dev --webpack",
+  "build": "next build --webpack",
+  "start": "next start",
+  "lint": "eslint"
+}
+```
+
+Dependencies: `next`, `react`, `react-dom`, `lucide-react`
+DevDependencies: `@tailwindcss/postcss`, `tailwindcss`, `typescript`, `@types/node`, `@types/react`, `@types/react-dom`, `eslint`, `eslint-config-next`
+
+---
+
+## Expected Output
+
+A single-page landing site at `localhost:3000` with 9 visually distinct sections, smooth anchor scrolling, full responsiveness, production-grade SEO metadata, and zero build errors. The site should pass `npm run build` with no TypeScript or ESLint errors.
